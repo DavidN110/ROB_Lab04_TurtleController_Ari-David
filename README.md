@@ -261,9 +261,14 @@ Se observan trazos limpios y la teletransportación controlada sin dejar rastro 
 Estas imágenes confirman que el nodo integra adecuadamente publicación de mensajes, servicios, lectura de teclado y control temporal del movimiento para cumplir con los objetivos del laboratorio.
 
 
-## 7. 🎥 Video
+## 7. 🎥 Video Explicativo
 
-👉 **[Insertar enlace del video]**
+A continuación se presenta el video explicativo donde se expone de forma clara y estructurada el desarrollo del laboratorio, siguiendo las fases solicitadas: la introducción oficial de LabSIR, la presentación del equipo, el análisis y la implementación de la solución propuesta, y finalmente las conclusiones del trabajo. Su objetivo es complementar la documentación escrita mostrando de manera visual el funcionamiento del código y las decisiones técnicas tomadas durante el proceso.
+
+📺 **Video**  
+[![Video explicativo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
+
+
 
 ## 8. 🧠 Conclusiones
 
