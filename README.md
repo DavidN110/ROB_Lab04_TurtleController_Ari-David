@@ -92,31 +92,32 @@ A continuación se presentan los principales diagramas de flujo del proyecto, qu
 ```mermaid
 flowchart TD
 
-A[Inicio del nodo] --> B[Crear publisher /turtle1/cmd_vel]
-B --> C[Crear clientes de servicios<br/>set_pen, teleport, clear]
-C --> D[Definir trayectorias y orígenes de letras]
-D --> E[Inicializar estados internos<br/>drawing, teleop_active, move_until]
-E --> F[Crear timer update()<br/>frecuencia 0.05 s]
-F --> G[Llamar get_key()]
+A[Inicio del nodo] --> B[Crear publisher]
+B --> C[Crear clientes de servicios]
+C --> D[Definir trayectorias y orígenes]
+D --> E[Inicializar estados internos]
+E --> F[Crear timer update()]
+F --> G[Leer tecla con get_key()]
 
-G --> H{¿Se presionó una letra válida?}
-H -- Sí --> I[Ejecutar hilo draw_letter()]
+G --> H{¿Letra válida?}
+H -- Sí --> I[Ejecutar draw_letter en un hilo]
 I --> F
 
 H -- No --> J{¿Tecla L?}
-J -- Sí --> K[Llamar servicio clear()]
+J -- Sí --> K[Ejecutar clear()]
 K --> F
 
 J -- No --> L{¿Flecha presionada?}
-L -- Sí --> M[Generar Twist<br/>Activar movimiento continuo]
+L -- Sí --> M[Generar Twist y mover 0.5 s]
 M --> F
 
 L -- No --> N{¿move_until activo?}
-N -- Sí --> O[Seguir publicando Twist]
+N -- Sí --> O[Seguir movimiento continuo]
 O --> F
 
-N -- No --> P[Publicar Twist en cero<br/>detener movimiento]
+N -- No --> P[Detener: publicar Twist cero]
 P --> F
+
 
 ```
 
