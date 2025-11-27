@@ -93,70 +93,49 @@ A continuación se presentan los principales diagramas de flujo del proyecto, qu
 flowchart TD
 
 A[Inicio del nodo] --> B[Crear publisher /turtle1/cmd_vel]
-B --> C[Crear clientes de servicios<br>/set_pen, /teleport_absolute, /clear]
-C --> D[Definir trayectorias de letras y posiciones base]
+B --> C[Crear clientes de servicios: set_pen, teleport, clear]
+C --> D[Definir trayectorias y posiciones base de letras]
 D --> E[Inicializar estados internos: drawing, teleop_active]
 E --> F[Crear timer update() cada 0.05 s]
-F --> G[Esperar eventos del usuario]
+F --> G[Leer teclado con get_key()]
 
-G --> H[get_key(): Leer entrada de teclado]
-H --> I{¿Letra válida?}
-I -- Sí --> J[Iniciar hilo de dibujo: draw_letter()]
-I -- No --> K{¿Flecha presionada?}
+G --> H{¿Letra válida?}
+H -- Sí --> I[Iniciar hilo de dibujo draw_letter()]
+H -- No --> J{¿Flecha presionada?}
 
-K -- Sí --> L[Calcular velocidad y activar movimiento continuo]
-L --> F
+J -- Sí --> K[Calcular Twist y activar movimiento continuo]
+K --> F
 
-K -- No --> M{¿Tecla L?}
-M -- Sí --> N[Llamar servicio /clear]
-N --> F
+J -- No --> L{¿Tecla L?}
+L -- Sí --> M[Llamar servicio clear()]
+M --> F
 
-M -- No --> F
+L -- No --> F
 
+### 🟦 3.1 Diagrama general del nodo TurtleController
 
+```mermaid
 flowchart TD
 
-A[Tecla de letra detectada] --> B{¿drawing o teleop_active?}
-B -- Sí --> C[Ignorar entrada]
-B -- No --> D[Activar drawing=True]
+A[Inicio del nodo] --> B[Crear publisher /turtle1/cmd_vel]
+B --> C[Crear clientes de servicios: set_pen, teleport, clear]
+C --> D[Definir trayectorias y posiciones base de letras]
+D --> E[Inicializar estados internos: drawing, teleop_active]
+E --> F[Crear timer update() cada 0.05 s]
+F --> G[Leer teclado con get_key()]
 
-D --> E[Cargar trayectoria normalizada]
-E --> F[Obtener origen de letra: letter_origins]
-F --> G[pen_up()]
-G --> H[teleport_to() al punto inicial]
+G --> H{¿Letra válida?}
+H -- Sí --> I[Iniciar hilo de dibujo draw_letter()]
+H -- No --> J{¿Flecha presionada?}
 
-H --> I{¿Segmentos restantes?}
-I -- No --> Z[pen_up() | drawing=False | Fin]
+J -- Sí --> K[Calcular Twist y activar movimiento continuo]
+K --> F
 
-I -- Sí --> J[p, nx, ny = segmento]
-J --> K{p == 0?}
-K -- Sí --> L[pen_up()]
-K -- No --> M[pen_down()]
+J -- No --> L{¿Tecla L?}
+L -- Sí --> M[Llamar servicio clear()]
+M --> F
 
-L --> N[Calcular x,y escalados]
-M --> N[Calcular x,y escalados]
-
-N --> O[teleport_to(x,y)]
-O --> P[Esperar 0.1s]
-P --> I
-
-
-flowchart TD
-
-A[Se presiona flecha] --> B[Crear mensaje Twist apropiado]
-B --> C[Establecer move_until = time + 0.5 s]
-C --> D[pen_down()]
-D --> E[Publicar Twist]
-E --> F[teleop_active = True]
-
-F --> G{¿Expira el tiempo?}
-G -- No --> H[Seguir moviendo<br>(no leer nuevas teclas)]
-H --> G
-
-G -- Sí --> I[Detener movimiento (Twist = 0)]
-I --> J[teleop_active=False]
-J --> K[Esperar nueva entrada de teclado]
-K --> A
+L -- No --> F
 ```
 
 
