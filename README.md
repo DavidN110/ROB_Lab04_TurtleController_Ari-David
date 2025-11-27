@@ -96,15 +96,15 @@ A[Inicio del nodo] --> B[Crear publisher]
 B --> C[Crear clientes de servicios]
 C --> D[Definir trayectorias y orígenes]
 D --> E[Inicializar estados internos]
-E --> F[Crear timer update()]
-F --> G[Leer tecla con get_key()]
+E --> F[Crear timer update( )]
+F --> G[Leer tecla con get_key( )]
 
 G --> H{Letra válida?}
 H -- Sí --> I[draw_letter en hilo]
 I --> F
 
 H -- No --> J{Tecla L?}
-J -- Sí --> K[clear()]
+J -- Sí --> K[clear( )]
 K --> F
 
 J -- No --> L{Flecha presionada?}
