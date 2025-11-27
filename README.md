@@ -87,38 +87,17 @@ A continuación se presentan los principales diagramas de flujo del proyecto, qu
 
 ---
 
-### 🟦 3.1 Diagrama general del nodo TurtleController
+## 3. 📐 Diagrama de flujo (Mermaid)
 
 ```mermaid
 flowchart TD
-
-A[Inicio del nodo] --> B[Crear publisher]
-B --> C[Crear clientes de servicios]
-C --> D[Definir trayectorias y orígenes]
-D --> E[Inicializar estados internos]
-E --> F[Crear timer update( )]
-F --> G[Leer tecla con get_key( )]
-
-G --> H{Letra válida?}
-H -- Sí --> I[draw_letter en hilo]
-I --> F
-
-H -- No --> J{Tecla L?}
-J -- Sí --> K[clear( )]
-K --> F
-
-J -- No --> L{Flecha presionada?}
-L -- Sí --> M[Generar Twist y mover 0.5 s]
-M --> F
-
-L -- No --> N{move_until activo?}
-N -- Sí --> O[Seguir movimiento]
-O --> F
-
-N -- No --> P[Enviar Twist cero]
-P --> F
-```
-
+    A[Inicio del nodo] --> B[Inicializar publicador y servicios]
+    B --> C[Esperar tecla con get_key()]
+    C -->|Letra| D[Iniciar hilo de dibujo automático]
+    C -->|Flecha| E[Movimiento manual con cmd_vel]
+    D --> F[Secuencia de teleports y control del lápiz]
+    F --> C
+    E --> C
 
 ## 4. 🐍 Código principal
 
