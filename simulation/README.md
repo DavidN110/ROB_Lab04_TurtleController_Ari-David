@@ -6,7 +6,7 @@ Básicamente es una tortuguita que se mueve por la pantalla obedeciendo comandos
 o teletransportes que le enviamos desde un nodo.
 
 El archivo principal para desarrollar el proyecto es **move_turtle.py**, que es el nodo que creamos para controlar la tortuga.
-Está dentro del paquete `my_turtle_controller`, que se encuentra en la carpeta src dentro del workspace Turtlesim_ws
+Está dentro del paquete `my_turtle_controller`, que se encuentra en la carpeta src dentro del workspace turtlesim_ws
 
 La estructura del workspace es más o menos así:
 
