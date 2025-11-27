@@ -89,7 +89,6 @@ A continuación se presentan los principales diagramas de flujo del proyecto, qu
 
 ## 3. 📐 Diagrama de flujo (Mermaid)
 
-```mermaid
 flowchart TD
     A[Inicio del nodo] --> B[Inicializar publicador y servicios]
     B --> C[Esperar tecla con get_key()]
