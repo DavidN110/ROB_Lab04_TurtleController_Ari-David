@@ -236,7 +236,47 @@ ros2 run my_turtle_controller move_turtle
 
 ## 6. 👁️ Resultados
 
-*(Insertar imágenes de las letras)*
+## 6. 👁️ Resultados
+
+A continuación se muestran los resultados obtenidos tras la ejecución del nodo desarrollado.  
+Las imágenes fueron capturadas directamente del simulador **Turtlesim** y evidencian:
+
+- La correcta teleoperación mediante flechas.  
+- El dibujo automático de letras.  
+- La limpieza del canvas mediante el servicio `/clear`.
+
+---
+
+### 🐢 6.1 Control manual mediante flechas
+
+La tortuga responde correctamente a los comandos del teclado gracias al sistema de **movimiento continuo** basado en ventanas temporales.
+
+**Evidencia:**
+
+![Movimiento con flechas](Media/1.jpeg)
+
+---
+
+La tecla **L** ejecuta el servicio `/clear`, permitiendo reiniciar el lienzo sin reiniciar el nodo.
+
+
+### ✏️ 6.2 Dibujo automático de letras
+
+Cada letra se trazó a partir de su trayectoria normalizada y su posición base dentro del canvas.  
+Se observan trazos limpios y la teletransportación controlada sin dejar rastro cuando el lápiz está desactivado.
+
+**Evidencia:**
+
+![Dibujo de letras](Media/2.jpeg)
+
+---
+
+![Letras y flechas](Media/3.jpeg)
+
+---
+
+Estas imágenes confirman que el nodo integra adecuadamente publicación de mensajes, servicios, lectura de teclado y control temporal del movimiento para cumplir con los objetivos del laboratorio.
+
 
 ## 7. 🎥 Video
 
