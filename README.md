@@ -200,7 +200,7 @@ class TurtleController(Node):
 
 ## 5. ▶️ Ejecución
 
-Para la verificación del funcionamiento del script, despues de guardar el archivo, debe en la consola mandarse lo siguiente:
+Para la verificación del funcionamiento del script, despues de guardar el archivo, debe en la consola ejecutarse lo siguiente:
 
 ```bash
 #Terminal A
