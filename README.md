@@ -7,45 +7,158 @@
 
 ## 1. 🧠 Introducción
 
-El paquete **turtlesim** es un simulador liviano incluido en ROS 2 que permite comprender de forma visual los conceptos fundamentales del sistema operativo robótico. Este entorno facilita la experimentación con tópicos, nodos y mensajes sin necesidad de hardware físico.  
+## Introducción
 
-En este laboratorio se desarrolla un nodo en Python capaz de controlar la tortuga mediante el teclado, sin utilizar `turtle_teleop_key`. Para ello se implementa:
+El presente laboratorio tiene como objetivo profundizar en el uso del simulador **Turtlesim** dentro del ecosistema **ROS 2 Humble**, aplicando conceptos fundamentales como nodos, tópicos, servicios y publicación de mensajes en un entorno de control distribuido.
 
-- un publicador al tópico `/turtle1/cmd_vel`,
-- una función de lectura de teclado,
-- un temporizador para el ciclo continuo,
-- funciones automáticas para dibujar letras.
+A diferencia de los ejemplos básicos proporcionados por ROS 2 (como `turtle_teleop_key`), en este laboratorio se desarrolla un **nodo propio de teleoperación**, capaz de:
 
-Las letras corresponden a las iniciales de los integrantes, implementadas totalmente dentro de **move_turtle.py**, cumpliendo las restricciones del laboratorio.
+- Capturar entradas de teclado en **modo raw** sin necesidad de presionar Enter.
+- Controlar la tortuga con flechas direccionales mediante un sistema de movimiento continuo basado en ventanas temporales.
+- Gestionar servicios nativos de `turtlesim`, tales como:
+  - `/turtle1/set_pen` para activar y desactivar el lápiz,
+  - `/turtle1/teleport_absolute` para realizar movimientos instantáneos,
+  - `/clear` para limpiar el canvas.
+- Dibujar automáticamente letras predefinidas (**A, C, N, D, S y B**) a partir de trayectorias normalizadas y posiciones personalizadas.
+- Evitar conflictos entre teleoperación y dibujo mediante un sistema interno de bloqueo que garantiza la ejecución segura de cada acción.
+
+El desarrollo integra de manera completa los conceptos de **publicación de mensajes**, **uso de servicios**, **timers**, y manejo de **eventos de entrada**, lo que permite evidenciar el funcionamiento real del modelo de comunicación de ROS 2. El código final implementa un controlador interactivo robusto, modular y extensible, alineado con los requerimientos del laboratorio LabSIR.
 
 ## 2. 🧩 Descripción del desarrollo
 
-### a) Control manual
-Mediante la función `get_key()` se leen las flechas del teclado, generando comandos:
+Para resolver los requerimientos del laboratorio, se construyó un nodo en Python capaz de integrar simultáneamente cuatro elementos fundamentales de ROS 2: **publicadores**, **servicios**, **timers** y **lectura de teclado en modo raw**. El desarrollo se organizó en cuatro etapas principales:
 
-- ↑ avanzar  
-- ↓ retroceder  
-- ← girar a la izquierda  
-- → girar a la derecha  
+---
 
-La función `update()` publica mensajes `Twist` cada 0.05 s según la tecla detectada.
+### ✔ 2.1 Lectura de teclado sin bloqueo (modo raw)
 
-### b) Dibujo automático
-Las letras **M**, **F** y **C** se implementan como funciones internas en el nodo, controlando rotaciones, movimientos lineales y tiempos.
+Se implementó una función personalizada `get_key()` basada en las librerías del sistema `termios`, `tty` y `select`, permitiendo:
+
+- Captura inmediata de teclas sin necesidad de presionar Enter.
+- Soporte para flechas del teclado mediante secuencias ANSI (`\x1b[A`, `\x1b[B`, etc.).
+- Compatibilidad con pulsación de letras para dibujar figuras.
+- Lectura no bloquante, indispensable para no detener el ciclo del nodo ROS 2.
+
+Esta función constituye la base del sistema de control teleoperado.
+
+---
+
+### ✔ 2.2 Control manual mediante flechas
+
+El nodo publica mensajes `Twist` en el tópico `/turtle1/cmd_vel` para mover la tortuga.  
+A diferencia de un control tradicional, se implementó un **movimiento continuo por ventanas temporales**:
+
+- Cada pulsación de flecha activa un movimiento por **0.5 segundos**.
+- Durante ese tiempo no se aceptan letras ni nuevos comandos de dibujo.
+- El movimiento angular (giros) y linear (avance/retroceso) se gestionan de forma independiente.
+
+Esto evita que la tortuga se detenga inmediatamente al no detectar teclas entre iteraciones del timer.
+
+---
+
+### ✔ 2.3 Uso de servicios para controlar acciones especiales
+
+Se utilizaron tres servicios fundamentales:
+
+| Servicio | Función |
+|---------|---------|
+| `/turtle1/set_pen` | Activa/ desactiva el lápiz, cambia color y grosor |
+| `/turtle1/teleport_absolute` | Teletransporta instantáneamente a la tortuga |
+| `/clear` | Limpia la pantalla del simulador |
+
+Funciones implementadas:
+
+- `pen_up()` para desactivar trazo  
+- `pen_down()` para activarlo  
+- `teleport_to(x, y, θ)` para mover instantáneamente  
+- `clear_screen()` ligado a la tecla **L**  
+
+Estos servicios permiten evitar trazos indeseados y posicionar la tortuga para dibujar letras.
+
+---
+
+### ✔ 2.4 Sistema para dibujar letras
+
+Cada letra (A, C, N, D, S y B) se definió como una **trayectoria normalizada**:
 
 ## 3. 📐 Diagrama de flujo (Mermaid)
 
+A continuación se presentan los principales diagramas de flujo del proyecto, que describen el funcionamiento del nodo, el sistema de dibujo y la lógica de teleoperación.
+
+---
+
+### 🟦 3.1 Diagrama general del nodo TurtleController
+
 ```mermaid
 flowchart TD
-    A[Inicio del nodo] --> B[Configurar publicador y temporizador]
-    B --> C[Leer tecla]
-    C -->|Flechas| D[Movimiento manual]
-    C -->|M/F/C| E[Ejecución de dibujo automático]
-    C -->|Otra tecla| C
-    D --> F[Publicar Twist]
-    E --> F
-    F --> C
+
+A[Inicio del nodo] --> B[Crear publisher /turtle1/cmd_vel]
+B --> C[Crear clientes de servicios<br>/set_pen, /teleport_absolute, /clear]
+C --> D[Definir trayectorias de letras y posiciones base]
+D --> E[Inicializar estados internos: drawing, teleop_active]
+E --> F[Crear timer update() cada 0.05 s]
+F --> G[Esperar eventos del usuario]
+
+G --> H[get_key(): Leer entrada de teclado]
+H --> I{¿Letra válida?}
+I -- Sí --> J[Iniciar hilo de dibujo: draw_letter()]
+I -- No --> K{¿Flecha presionada?}
+
+K -- Sí --> L[Calcular velocidad y activar movimiento continuo]
+L --> F
+
+K -- No --> M{¿Tecla L?}
+M -- Sí --> N[Llamar servicio /clear]
+N --> F
+
+M -- No --> F
+
+
+flowchart TD
+
+A[Tecla de letra detectada] --> B{¿drawing o teleop_active?}
+B -- Sí --> C[Ignorar entrada]
+B -- No --> D[Activar drawing=True]
+
+D --> E[Cargar trayectoria normalizada]
+E --> F[Obtener origen de letra: letter_origins]
+F --> G[pen_up()]
+G --> H[teleport_to() al punto inicial]
+
+H --> I{¿Segmentos restantes?}
+I -- No --> Z[pen_up() | drawing=False | Fin]
+
+I -- Sí --> J[p, nx, ny = segmento]
+J --> K{p == 0?}
+K -- Sí --> L[pen_up()]
+K -- No --> M[pen_down()]
+
+L --> N[Calcular x,y escalados]
+M --> N[Calcular x,y escalados]
+
+N --> O[teleport_to(x,y)]
+O --> P[Esperar 0.1s]
+P --> I
+
+
+flowchart TD
+
+A[Se presiona flecha] --> B[Crear mensaje Twist apropiado]
+B --> C[Establecer move_until = time + 0.5 s]
+C --> D[pen_down()]
+D --> E[Publicar Twist]
+E --> F[teleop_active = True]
+
+F --> G{¿Expira el tiempo?}
+G -- No --> H[Seguir moviendo<br>(no leer nuevas teclas)]
+H --> G
+
+G -- Sí --> I[Detener movimiento (Twist = 0)]
+I --> J[teleop_active=False]
+J --> K[Esperar nueva entrada de teclado]
+K --> A
 ```
+
 
 ## 4. 🐍 Código principal
 
@@ -57,17 +170,61 @@ src/my_turtle_controller/move_turtle.py
 
 Fragmento representativo:
 
+A continuación se muestra un **fragmento representativo** que resume la estructura general del nodo, incluyendo la lectura del teclado, el uso de servicios y el ciclo principal `update()`:
+
 ```python
 class TurtleController(Node):
+
     def __init__(self):
-        super().__init__('turtle_controller')
-        self.pub = self.create_publisher(Twist, '/turtle1/cmd_vel', 10)
+        super().__init__("turtle_controller")
+
+        # Publicador para movimiento
+        self.pub = self.create_publisher(Twist, "/turtle1/cmd_vel", 10)
+
+        # Clientes de servicios
+        self.set_pen = self.create_client(SetPen, "/turtle1/set_pen")
+        self.teleport = self.create_client(TeleportAbsolute, "/turtle1/teleport_absolute")
+        self.clear = self.create_client(Empty, "/clear")
+
+        # Sincronización con los servicios
+        self.set_pen.wait_for_service()
+        self.teleport.wait_for_service()
+        self.clear.wait_for_service()
+
+        # Estados internos
+        self.drawing = False
+        self.teleop_active = False
+        self.move_until = 0.0
+
+        # Timer principal del nodo
         self.timer = self.create_timer(0.05, self.update)
 
+    # Lógica principal del nodo
     def update(self):
-        key = get_key()
-        twist = Twist()
+        key = get_key(0.05)
 
+        # Movimiento continuo por ventana de tiempo
+        if key is None:
+            if time.time() < self.move_until:
+                self.teleop_active = True
+                return
+            else:
+                self.pub.publish(Twist())  # detener
+                self.teleop_active = False
+                return
+
+        # Limpiar pantalla
+        if key.upper() == "L":
+            self.clear_screen()
+            return
+
+        # Dibujar letras
+        if len(key) == 1 and key.upper() in self.letters:
+            threading.Thread(target=self.draw_letter, args=(key.upper(),), daemon=True).start()
+            return
+
+        # Teleoperación con flechas
+        twist = Twist()
         if key == UP:
             twist.linear.x = 2.0
         elif key == DOWN:
@@ -76,15 +233,12 @@ class TurtleController(Node):
             twist.angular.z = 2.0
         elif key == RIGHT:
             twist.angular.z = -2.0
-        elif key == 'm':
-            self.draw_M()
-        elif key == 'f':
-            self.draw_F()
-        elif key == 'c':
-            self.draw_C()
         else:
             return
 
+        self.move_until = time.time() + 0.5
+        self.teleop_active = True
+        self.pen_down()
         self.pub.publish(twist)
 ```
 
