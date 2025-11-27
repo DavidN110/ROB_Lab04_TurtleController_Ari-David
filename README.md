@@ -88,15 +88,17 @@ A continuación se presentan los principales diagramas de flujo del proyecto, qu
 ---
 
 ## 3. 📐 Diagrama de flujo (Mermaid)
-
+```mermaid
 flowchart TD
-    A[Inicio del nodo] --> B[Inicializar publicador y servicios]
-    B --> C[Esperar tecla con get_key()]
-    C -->|Letra| D[Iniciar hilo de dibujo automático]
-    C -->|Flecha| E[Movimiento manual con cmd_vel]
-    D --> F[Secuencia de teleports y control del lápiz]
+    A[Inicio del nodo ROS2] --> B[Configurar publisher y timer]
+    B --> C[Leer tecla presionada]
+    C -->|Flecha| D[Movimiento manual]
+    C -->|M,F,C| E[Llamar función de dibujo]
+    C -->|Otra tecla| C
+    D --> F[Publicar Twist]
+    E --> F
     F --> C
-    E --> C
+```
 
 ## 4. 🐍 Código principal
 
