@@ -99,26 +99,24 @@ D --> E[Inicializar estados internos]
 E --> F[Crear timer update()]
 F --> G[Leer tecla con get_key()]
 
-G --> H{¿Letra válida?}
-H -- Sí --> I[Ejecutar draw_letter en un hilo]
+G --> H{Letra válida?}
+H -- Sí --> I[draw_letter en hilo]
 I --> F
 
-H -- No --> J{¿Tecla L?}
-J -- Sí --> K[Ejecutar clear()]
+H -- No --> J{Tecla L?}
+J -- Sí --> K[clear()]
 K --> F
 
-J -- No --> L{¿Flecha presionada?}
+J -- No --> L{Flecha presionada?}
 L -- Sí --> M[Generar Twist y mover 0.5 s]
 M --> F
 
-L -- No --> N{¿move_until activo?}
-N -- Sí --> O[Seguir movimiento continuo]
+L -- No --> N{move_until activo?}
+N -- Sí --> O[Seguir movimiento]
 O --> F
 
-N -- No --> P[Detener: publicar Twist cero]
+N -- No --> P[Enviar Twist cero]
 P --> F
-
-
 ```
 
 
