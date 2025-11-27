@@ -2,8 +2,8 @@
 ### *Intro a ROS 2 Humble – Turtlesim*
 
 **Integrantes:**  
+- Ariadna Contreras Nossa
 - David Santiago Nagles Barajas  
-- (Nombre del compañero)
 
 ## 1. 🧠 Introducción
 
