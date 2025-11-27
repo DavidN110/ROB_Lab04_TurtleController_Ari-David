@@ -236,8 +236,6 @@ ros2 run my_turtle_controller move_turtle
 
 ## 6. 👁️ Resultados
 
-## 6. 👁️ Resultados
-
 A continuación se muestran los resultados obtenidos tras la ejecución del nodo desarrollado.  
 Las imágenes fueron capturadas directamente del simulador **Turtlesim** y evidencian:
 
@@ -282,9 +280,34 @@ Estas imágenes confirman que el nodo integra adecuadamente publicación de mens
 
 👉 **[Insertar enlace del video]**
 
-## 8. 📝 Conclusiones
+## 8. 🧠 Conclusiones
 
-- Se comprendió el funcionamiento básico de ROS 2 con Turtlesim.  
-- Se implementó control manual y automático desde un único script.  
-- Se aplicaron conceptos de cinemática, publicación y lectura de teclado.  
-- Se cumplieron todas las restricciones del laboratorio.
+El desarrollo de este laboratorio permitió comprender y aplicar de manera práctica los conceptos fundamentales del ecosistema **ROS 2 Humble** utilizando el simulador *Turtlesim*. A partir de la implementación del nodo personalizado de teleoperación y dibujo, se obtuvieron las siguientes conclusiones:
+
+1. **Integración real de tópicos y servicios:**  
+   El uso simultáneo de un publicador (`/cmd_vel`) y varios servicios (`/set_pen`, `/teleport_absolute`, `/clear`) evidenció cómo ROS 2 permite combinar diferentes mecanismos de comunicación para construir comportamientos complejos en robots reales o simulados.
+
+2. **Lectura de teclado en modo raw:**  
+   La implementación de `get_key()` demostró la importancia de controlar la entrada del usuario sin bloquear el ciclo del nodo, requisito indispensable para sistemas interactivos y en tiempo real.
+
+3. **Movimiento estable mediante ventana temporal:**  
+   Al aplicar un sistema basado en `move_until`, se resolvió el problema de movimientos intermitentes causado por la lectura no constante del teclado, logrando un comportamiento fluido y más cercano a un robot físico.
+
+4. **Diseño modular y escalable:**  
+   La separación clara entre:
+   - teleoperación,  
+   - servicios de la tortuga,  
+   - dibujo automático de letras,  
+   - y el loop principal,  
+   permitió crear un nodo limpio, entendible y fácilmente extensible para nuevas funciones o letras adicionales.
+
+5. **Comprensión profunda del flujo de ejecución:**  
+   Los diagramas de flujo elaborados facilitaron visualizar la arquitectura general del nodo, el manejo de estados y la interacción entre teleoperación y dibujo. Esto refuerza habilidades esenciales de documentación y diseño de software robótico.
+
+6. **Aplicación directa a sistemas reales:**  
+   Aunque el entorno es simulado, los mecanismos utilizados (publicación, servicios, callbacks, timers, hilos y manejo de eventos) son los mismos que se emplean en robots reales dentro de ROS 2, por lo que este laboratorio constituye una base sólida para desarrollos más avanzados.
+
+---
+
+En conjunto, el laboratorio no solo permitió cumplir con los objetivos planteados, sino que también fortaleció la comprensión del modelo de comunicación de ROS 2 y la capacidad de diseñar nodos completamente interactivos y funcionales.
+
