@@ -17,4 +17,4 @@ Turtlesim_ws/  </br>
                 ├── init.py </br>
                 └── move_turtle.py ← AQUÍ está el nodo que controla la tortuga </br>
 
-De todas formas se deja el archivo  **move_turtle.py** afuera en simulation para facil, acceso pero debe posicionarse anteriormente
+De todas formas se deja el archivo  **move_turtle.py** afuera en simulation para facil acceso pero debe posicionarse anteriormente
