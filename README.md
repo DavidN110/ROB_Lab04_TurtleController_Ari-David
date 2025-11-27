@@ -7,8 +7,6 @@
 
 ## 1. 🧠 Introducción
 
-## Introducción
-
 El presente laboratorio tiene como objetivo profundizar en el uso del simulador **Turtlesim** dentro del ecosistema **ROS 2 Humble**, aplicando conceptos fundamentales como nodos, tópicos, servicios y publicación de mensajes en un entorno de control distribuido.
 
 A diferencia de los ejemplos básicos proporcionados por ROS 2 (como `turtle_teleop_key`), en este laboratorio se desarrolla un **nodo propio de teleoperación**, capaz de:
