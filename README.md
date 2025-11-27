@@ -265,8 +265,9 @@ Estas imágenes confirman que el nodo integra adecuadamente publicación de mens
 
 A continuación se presenta el video explicativo donde se expone de forma clara y estructurada el desarrollo del laboratorio, siguiendo las fases solicitadas: la introducción oficial de LabSIR, la presentación del equipo, el análisis y la implementación de la solución propuesta, y finalmente las conclusiones del trabajo. Su objetivo es complementar la documentación escrita mostrando de manera visual el funcionamiento del código y las decisiones técnicas tomadas durante el proceso.
 
-📺 **Video**  
-[![Video explicativo](https://img.youtube.com/vi/VIDEO_ID/0.jpg)](https://youtu.be/PC4uRNjNoDM)
+### 🎥 Video explicativo del laboratorio
+[![Video Explicativo](https://img.youtube.com/vi/PC4uRNjNoDM/0.jpg)](https://youtu.be/PC4uRNjNoDM)
+
 
 
 
