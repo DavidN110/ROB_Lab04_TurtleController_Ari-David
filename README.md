@@ -1,4 +1,4 @@
-# 🐢 Laboratorio No. 04 – Robótica de Desarrollo
+# 🐢 Laboratorio No. 04 – Turtlesim en ROS2
 ### *Intro a ROS 2 Humble – Turtlesim*
 ![Vista previa del laboratorio](Media/turtle.gif)
 **Integrantes:**  
