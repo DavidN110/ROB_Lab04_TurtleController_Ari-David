@@ -93,49 +93,31 @@ A continuación se presentan los principales diagramas de flujo del proyecto, qu
 flowchart TD
 
 A[Inicio del nodo] --> B[Crear publisher /turtle1/cmd_vel]
-B --> C[Crear clientes de servicios: set_pen, teleport, clear]
-C --> D[Definir trayectorias y posiciones base de letras]
-D --> E[Inicializar estados internos: drawing, teleop_active]
-E --> F[Crear timer update() cada 0.05 s]
-F --> G[Leer teclado con get_key()]
+B --> C[Crear clientes de servicios<br/>set_pen, teleport, clear]
+C --> D[Definir trayectorias y orígenes de letras]
+D --> E[Inicializar estados internos<br/>drawing, teleop_active, move_until]
+E --> F[Crear timer update()<br/>frecuencia 0.05 s]
+F --> G[Llamar get_key()]
 
-G --> H{¿Letra válida?}
-H -- Sí --> I[Iniciar hilo de dibujo draw_letter()]
-H -- No --> J{¿Flecha presionada?}
+G --> H{¿Se presionó una letra válida?}
+H -- Sí --> I[Ejecutar hilo draw_letter()]
+I --> F
 
-J -- Sí --> K[Calcular Twist y activar movimiento continuo]
+H -- No --> J{¿Tecla L?}
+J -- Sí --> K[Llamar servicio clear()]
 K --> F
 
-J -- No --> L{¿Tecla L?}
-L -- Sí --> M[Llamar servicio clear()]
+J -- No --> L{¿Flecha presionada?}
+L -- Sí --> M[Generar Twist<br/>Activar movimiento continuo]
 M --> F
 
-L -- No --> F
+L -- No --> N{¿move_until activo?}
+N -- Sí --> O[Seguir publicando Twist]
+O --> F
 
-### 🟦 3.1 Diagrama general del nodo TurtleController
+N -- No --> P[Publicar Twist en cero<br/>detener movimiento]
+P --> F
 
-```mermaid
-flowchart TD
-
-A[Inicio del nodo] --> B[Crear publisher /turtle1/cmd_vel]
-B --> C[Crear clientes de servicios: set_pen, teleport, clear]
-C --> D[Definir trayectorias y posiciones base de letras]
-D --> E[Inicializar estados internos: drawing, teleop_active]
-E --> F[Crear timer update() cada 0.05 s]
-F --> G[Leer teclado con get_key()]
-
-G --> H{¿Letra válida?}
-H -- Sí --> I[Iniciar hilo de dibujo draw_letter()]
-H -- No --> J{¿Flecha presionada?}
-
-J -- Sí --> K[Calcular Twist y activar movimiento continuo]
-K --> F
-
-J -- No --> L{¿Tecla L?}
-L -- Sí --> M[Llamar servicio clear()]
-M --> F
-
-L -- No --> F
 ```
 
 
