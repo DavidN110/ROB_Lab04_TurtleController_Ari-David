@@ -1,6 +1,8 @@
 # 🐢 Laboratorio No. 04 – Robótica de Desarrollo
 ### *Intro a ROS 2 Humble – Turtlesim*
-
+<p align="center">
+  <img src="Media/turtle.gif" width="50%">
+</p>
 **Integrantes:**  
 - Ariadna Contreras Nossa
 - David Santiago Nagles Barajas  
