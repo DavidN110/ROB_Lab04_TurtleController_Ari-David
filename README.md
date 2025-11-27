@@ -200,12 +200,20 @@ class TurtleController(Node):
 
 ## 5. ▶️ Ejecución
 
+Para la verificación del funcionamiento del script, despues de guardar el archivo, debe en la consola mandarse lo siguiente:
+
 ```bash
+#Terminal A
+chmod +x ~/ros_humble/turtlesim_ws/src/my_turtle_controller/my_turtle_controller/move_turtle.py
+cd ~ros_humble/turtlesim_ws/
+colcon build
+source install/setup.bash
 ros2 run turtlesim turtlesim_node
 ```
 
 ```bash
-cd ~/ros2_ws
+#Terminal B
+cd ~ros_humble/turtlesim_ws/
 colcon build
 source install/setup.bash
 ros2 run my_turtle_controller move_turtle
